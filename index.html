@@ -32,7 +32,7 @@
 
         .hidden { display: none; }
 
-        /* --- Header --- */
+        
         .store-header {
             background-color: var(--steam-blue);
             padding: 0 20px;
@@ -109,7 +109,7 @@
             to { opacity: 1; transform: translateY(0); }
         }
 
-        /* --- Support Page --- */
+        
         .content-wrapper {
             text-align: center;
             padding: 40px;
@@ -132,7 +132,7 @@
         }
 
 
-        /* --- Games Library Page --- */
+        
         .games-grid {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
@@ -162,7 +162,7 @@
             color: var(--steam-light-blue);
         }
 
-        /* --- Auth Pages --- */
+       
         .auth-container {
             display: flex;
             justify-content: center;
@@ -225,7 +225,7 @@
         .error-message { color: var(--steam-red); text-align: center; margin-top: 10px; }
         .success-message { color: var(--steam-green); text-align: center; margin-top: 10px; }
 
-        /* --- Profile Page --- */
+        
         .profile-header {
             display: flex;
             align-items: center;
@@ -271,7 +271,7 @@
         .played-game-card img { width: 100%; height: 120px; object-fit: cover; }
         .played-game-card p { margin: 10px 0; font-weight: 500; }
 
-        /* --- Game Details Page --- */
+        /* --- ZEN ES MI GORDAAAA --- */
         .game-page-container {
             display: grid;
             grid-template-columns: 1fr;
@@ -319,7 +319,7 @@
             margin-top: 20px;
         }
         
-        /* --- Reviews Section --- */
+        
         .reviews-section {
             background-color: var(--steam-blue);
             padding: 20px;
@@ -407,7 +407,7 @@
 </head>
 <body>
 
-    <!-- Header (siempre visible) -->
+    
     <header class="store-header">
         <a href="#" class="logo" onclick="showPage('games-library-page')"><i class="fas fa-rocket"></i> ZenLauncher</a>
         <nav>
@@ -439,14 +439,14 @@
             </div>
         </section>
         
-        <!-- PÁGINA DE BIBLIOTECA DE JUEGOS -->
+       
         <section id="games-library-page" class="page hidden">
             <h2 style="color: var(--steam-light-blue); margin-bottom: 20px;">Mis Juegos</h2>
             <div id="games-grid" class="games-grid">
             </div>
         </section>
 
-        <!-- PÁGINA DE DETALLES DEL JUEGO -->
+        
         <section id="game-details-page" class="page hidden">
             <div class="game-page-container">
                 <main class="main-content">
@@ -561,20 +561,17 @@
         </section>
     </div>
 
-    <!-- Input oculto para subir el avatar -->
+    
     <input type="file" id="avatar-upload" accept="image/*" class="hidden">
 
     <script>
-        // =================================================================================
-        // == CONFIGURACIÓN DE DISCORD Y TIDIO ==
-        // == PEGA TUS CLAVES AQUÍ ==
-        // =================================================================================
-        const DISCORD_TOKEN = 'AQUÍ_VA_EL_TOKEN_DE_TU_BOT'; // <--- PEGA TU TOKEN DE DISCORD AQUÍ
-        const DISCORD_CHANNEL_ID = 'AQUÍ_VA_EL_ID_DE_TU_CANAL'; // <--- PEGA EL ID DE TU CANAL DE DISCORD AQUÍ
+        
+        const DISCORD_TOKEN = 'AQUÍ_VA_EL_TOKEN_DE_TU_BOT'; // <--- TOKEN DE DISCORD AQUÍ
+        const DISCORD_CHANNEL_ID = 'AQUÍ_VA_EL_ID_DE_TU_CANAL'; // <--- ID DE TU CANAL DE DISCORD AQUÍ
         const TIDIO_PUBLIC_KEY = 'AQUÍ_VA_TU_PUBLIC_KEY'; // <--- PEGA TU PUBLIC KEY DE TIDIO AQUÍ
-        // =================================================================================
+        
 
-        // Base de datos de juegos
+       
         const gamesDatabase = [
             {
                 id: 'zenith-arena',
@@ -638,7 +635,6 @@
             }
 
             function loadTidioChat() {
-                // Cargar el script de Tidio solo si no se ha cargado antes
                 if (!document.getElementById('tidio-chat-script') && TIDIO_PUBLIC_KEY && TIDIO_PUBLIC_KEY !== 'AQUÍ_VA_TU_PUBLIC_KEY') {
                     const script = document.createElement('script');
                     script.src = `//code.tidio.co/${TIDIO_PUBLIC_KEY}.js`;
