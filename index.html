@@ -3,529 +3,962 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ed TV</title>
+    <title>ZenLauncher - Tu Portal de Juegos</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        /* --- ESTILOS GLOBALES Y CLON DE OME TV --- */
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
+        :root {
+            --steam-blue: #1b2838;
+            --steam-dark-bg: #0e1621;
+            --steam-darker-bg: #000000;
+            --steam-light-blue: #66c0f4;
+            --steam-green: #4c7c3f;
+            --steam-orange: #e36b22;
+            --steam-text-light: #c7d5e0;
+            --steam-text-dim: #8b98a5;
+            --steam-red: #c23f39;
         }
 
         body {
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-            background-color: #000;
-            color: #fff;
-            overflow: hidden;
-            height: 100vh;
-            display: flex;
+            font-family: 'Roboto', sans-serif;
+            background-color: var(--steam-dark-bg);
+            color: var(--steam-text-light);
+            margin: 0;
+            padding: 0;
+            line-height: 1.6;
         }
 
-        /* --- LADO IZQUIERDO (INTERFAZ DE USUARIO) --- */
-        .user-interface {
-            width: 30%;
-            min-width: 300px;
-            background-color: #111;
+        .hidden { display: none; }
+
+        /* --- Header --- */
+        .store-header {
+            background-color: var(--steam-blue);
+            padding: 0 20px;
             display: flex;
-            flex-direction: column;
+            justify-content: space-between;
             align-items: center;
-            padding: 20px;
-            position: relative;
-            z-index: 2;
-        }
-
-        .logo-section {
-            text-align: center;
-            margin-bottom: 40px; /* Aumenté el margen para rellenar el espacio */
+            height: 60px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.5);
         }
 
         .logo {
-            display: flex;
-            align-items: center;
-            justify-content: center;
             font-size: 1.5rem;
-            font-weight: bold;
-            margin-bottom: 10px;
-        }
-
-        .logo i {
-            color: #ff9500;
-            margin-right: 10px;
-            font-size: 2rem;
-        }
-
-        .online-users {
-            font-size: 0.9rem;
-            color: #aaa;
-        }
-        .active-viewers {
-            font-size: 0.8rem;
-            color: #888;
-            margin-top: 5px;
-        }
-
-        /* Sección de botones de descarga eliminada */
-
-        .control-buttons {
+            font-weight: 700;
+            color: var(--steam-light-blue);
+            text-decoration: none;
             display: flex;
-            flex-direction: column;
-            width: 100%;
-            gap: 10px;
-        }
-
-        .control-btn {
-            padding: 12px;
-            border: none;
-            border-radius: 8px;
-            font-size: 1rem;
-            font-weight: bold;
-            color: #fff;
-            background-color: #ff9500;
-            cursor: pointer;
-            transition: background-color 0.3s, transform 0.2s;
-        }
-
-        .control-btn:hover {
-            background-color: #e68500;
-            transform: translateY(-2px);
-        }
-
-        .control-btn.stop {
-            background-color: #d32f2f;
-        }
-
-        .control-btn.stop:hover {
-            background-color: #b71c1c;
-        }
-
-        /* --- LADO DERECHO (VIDEO Y CHAT) --- */
-        .video-chat-area {
-            flex-grow: 1;
-            position: relative;
-            background-color: #000;
-            display: flex;
-            justify-content: center;
             align-items: center;
         }
+        .logo i { margin-right: 10px; }
 
-        /* --- VIDEOS --- */
-        #strangerVideo {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            position: absolute;
-            top: 0;
-            left: 0;
-            display: none;
-        }
-
-        #userVideo {
-            position: absolute;
-            bottom: 20px;
-            left: 20px;
-            width: 200px;
-            height: 150px;
-            object-fit: cover;
-            border-radius: 10px;
-            border: 2px solid #ff9500;
-            z-index: 3;
-            display: none;
-        }
-        
-        /* --- MENSAJES Y CONTROLES SOBRE EL VIDEO --- */
-        .overlay-message {
-            position: absolute;
-            bottom: 20px;
-            left: 50%;
-            transform: translateX(-50%);
-            text-align: center;
-            color: #fff;
-            background-color: rgba(0, 0, 0, 0.7);
-            padding: 20px 30px;
-            border-radius: 10px;
-            z-index: 4;
-        }
-
-        .top-controls {
-            position: absolute;
-            top: 20px;
-            right: 20px;
-            z-index: 4;
-            display: none;
-        }
-
-        .top-controls button {
-            background: rgba(0,0,0,0.5);
-            border: none;
-            color: #fff;
-            font-size: 1.2rem;
-            cursor: pointer;
-            margin-left: 15px;
-            padding: 8px;
-            border-radius: 5px;
-            transition: background-color 0.3s;
-        }
-        .top-controls button:hover {
-            background-color: rgba(255,255,255,0.2);
-        }
-        .top-controls button.active {
-            color: #ff9500;
-        }
-
-        .report-btn {
-            position: absolute;
-            top: 20px;
-            left: 20px;
-            background: rgba(0,0,0,0.5);
-            border: none;
-            color: #fff;
-            font-size: 1.2rem;
-            cursor: pointer;
-            padding: 8px;
-            border-radius: 5px;
-            z-index: 4;
-            display: none;
-        }
-        .report-btn:hover {
-            color: #d32f2f;
-        }
-
-        /* --- CHAT --- */
-        .chat-overlay {
-            position: absolute;
-            bottom: 20px;
-            right: 20px;
-            width: 40%;
-            max-width: 450px;
-            height: 50%;
-            background-color: rgba(0, 0, 0, 0.6);
-            border-radius: 10px;
-            display: none;
-            flex-direction: column;
-            overflow: hidden;
-            z-index: 4;
-        }
-
-        .chat-messages {
-            flex-grow: 1;
-            padding: 15px;
-            overflow-y: auto;
-            font-size: 0.9rem;
-        }
-
-        .message {
-            margin-bottom: 10px;
-            padding: 8px 12px;
-            border-radius: 15px;
-            max-width: 80%;
-            line-height: 1.4;
-            word-wrap: break-word;
-        }
-
-        .message.you {
-            background-color: #007aff;
-            align-self: flex-end;
-            text-align: right;
-        }
-
-        .message.stranger {
-            background-color: #333;
-            align-self: flex-start;
-        }
-
-        .chat-input-area {
+        .nav-menu {
             display: flex;
-            padding: 10px;
-            border-top: 1px solid #444;
-        }
-
-        .chat-input-area input {
-            flex-grow: 1;
-            padding: 8px;
-            border: 1px solid #555;
-            background-color: rgba(255, 255, 255, 0.1);
-            color: #fff;
-            border-radius: 15px;
-            outline: none;
-        }
-
-        /* --- MODALS --- */
-        .modal {
-            display: none;
-            position: fixed;
-            z-index: 10;
-            left: 0;
-            top: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0,0,0,0.7);
-            justify-content: center;
-            align-items: center;
-        }
-        .modal-content {
-            background-color: #222;
-            padding: 20px;
-            border-radius: 10px;
-            width: 80%;
-            max-width: 400px;
-            text-align: center;
-        }
-        .modal-content ul {
             list-style: none;
-            text-align: left;
+            margin: 0;
             padding: 0;
         }
-        .modal-content li {
-            padding: 10px;
-            border-bottom: 1px solid #444;
+
+        .nav-menu li { margin-right: 15px; }
+
+        .nav-menu a {
+            color: var(--steam-text-light);
+            text-decoration: none;
+            font-size: 0.9rem;
+            padding: 5px 10px;
+            border-radius: 3px;
+            transition: background-color 0.2s;
             cursor: pointer;
+        }
+
+        .nav-menu a:hover { background-color: rgba(255,255,255,0.1); }
+
+        .user-actions {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        
+        .user-avatar {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            cursor: pointer;
+            border: 2px solid transparent;
+            transition: border-color 0.3s;
+            object-fit: cover;
+        }
+        .user-avatar:hover {
+            border-color: var(--steam-light-blue);
+        }
+
+        /* --- Main Container --- */
+        .app-container {
+            max-width: 1200px;
+            margin: 30px auto;
+            padding: 0 20px;
+        }
+        
+        .page {
+            animation: fadeIn 0.4s ease-in-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* --- Support Page --- */
+        .content-wrapper {
+            text-align: center;
+            padding: 40px;
+            background-color: var(--steam-blue);
+            border-radius: 8px;
+        }
+        .content-wrapper h2 {
+            color: var(--steam-light-blue);
+            margin-bottom: 10px;
+        }
+        .content-wrapper p {
+            color: var(--steam-text-dim);
+        }
+        #tidio-chat-code {
+            margin-top: 20px;
+            border: 1px dashed var(--steam-text-dim);
+            padding: 20px;
+            background-color: var(--steam-darker-bg);
+            border-radius: 5px;
+        }
+
+
+        /* --- Games Library Page --- */
+        .games-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 25px;
+        }
+        .game-card {
+            background-color: var(--steam-blue);
+            border-radius: 8px;
+            overflow: hidden;
+            cursor: pointer;
+            transition: transform 0.3s, box-shadow 0.3s;
+            text-align: center;
+        }
+        .game-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.3);
+        }
+        .game-card img {
+            width: 100%;
+            height: 350px;
+            object-fit: cover;
+        }
+        .game-card h3 {
+            padding: 15px;
+            margin: 0;
+            font-size: 1.2rem;
+            color: var(--steam-light-blue);
+        }
+
+        /* --- Auth Pages --- */
+        .auth-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 60vh;
+        }
+        .auth-form {
+            background-color: var(--steam-blue);
+            padding: 40px;
+            border-radius: 8px;
+            width: 100%;
+            max-width: 400px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+        }
+        .auth-form h2 {
+            text-align: center;
+            margin-top: 0;
+            color: var(--steam-light-blue);
+        }
+        .form-group {
+            margin-bottom: 20px;
+        }
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            color: var(--steam-text-dim);
+        }
+        .form-group input, .form-group textarea {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #444;
+            background-color: var(--steam-darker-bg);
+            color: var(--steam-text-light);
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+        .form-group input:focus, .form-group textarea:focus {
+            outline: none;
+            border-color: var(--steam-light-blue);
+        }
+        .btn {
+            padding: 12px 20px;
+            border: none;
+            border-radius: 4px;
+            font-size: 1rem;
+            font-weight: 500;
+            cursor: pointer;
+            background-color: var(--steam-green);
+            color: white;
             transition: background-color 0.2s;
         }
-        .modal-content li:hover {
-            background-color: #333;
+        .btn:hover { background-color: #5a8a4d; }
+        .btn:disabled { background-color: #555; cursor: not-allowed; }
+        .auth-switch {
+            text-align: center;
+            margin-top: 20px;
+            color: var(--steam-text-dim);
         }
-        .close-modal {
-            color: #aaa;
-            float: right;
-            font-size: 28px;
-            font-weight: bold;
-            cursor: pointer;
-        }
-        .close-modal:hover { color: #fff; }
+        .auth-switch a { color: var(--steam-light-blue); cursor: pointer; }
+        .error-message { color: var(--steam-red); text-align: center; margin-top: 10px; }
+        .success-message { color: var(--steam-green); text-align: center; margin-top: 10px; }
 
+        /* --- Profile Page --- */
+        .profile-header {
+            display: flex;
+            align-items: center;
+            gap: 25px;
+            background-color: var(--steam-blue);
+            padding: 30px;
+            border-radius: 8px;
+            margin-bottom: 30px;
+        }
+        .profile-avatar {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            cursor: pointer;
+            border: 3px solid var(--steam-light-blue);
+            transition: transform 0.2s;
+            object-fit: cover;
+        }
+        .profile-avatar:hover {
+            transform: scale(1.05);
+        }
+        .profile-info h1 { margin: 0; }
+        .profile-info p { margin: 5px 0 0; color: var(--steam-text-dim); }
+        .played-games-section h2 {
+            color: var(--steam-light-blue);
+            border-bottom: 1px solid var(--steam-darker-bg);
+            padding-bottom: 10px;
+        }
+        .played-games-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+        .played-game-card {
+            background-color: var(--steam-blue);
+            border-radius: 5px;
+            overflow: hidden;
+            text-align: center;
+            transition: transform 0.2s;
+        }
+        .played-game-card:hover { transform: translateY(-5px); }
+        .played-game-card img { width: 100%; height: 120px; object-fit: cover; }
+        .played-game-card p { margin: 10px 0; font-weight: 500; }
+
+        /* --- Game Details Page --- */
+        .game-page-container {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 30px;
+        }
+        .main-content { display: flex; flex-direction: column; gap: 30px; }
+        .hero-section {
+            position: relative;
+            background-size: cover;
+            background-position: center;
+            border-radius: 5px;
+            overflow: hidden;
+            min-height: 400px;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-end;
+        }
+        .hero-overlay {
+            position: absolute; top: 0; left: 0; right: 0; bottom: 0;
+            background: linear-gradient(to top, rgba(0,0,0,0.9) 0%, rgba(0,0,0,0.4) 60%, transparent 100%);
+        }
+        .hero-content { position: relative; z-index: 1; padding: 20px; }
+        .hero-title { font-size: 3rem; font-weight: 700; margin: 0; }
+        .hero-actions { display: flex; gap: 15px; margin-top: 20px; }
+        .btn-play { background-color: var(--steam-green); }
+        .btn-play:hover { background-color: #5a8a4d; }
+        .side-panel { display: none; }
+        .side-panel-section { background-color: var(--steam-blue); padding: 15px; border-radius: 5px; }
+        .game-cover { width: 100%; border-radius: 5px; margin-bottom: 15px; }
+        .review-summary { display: flex; align-items: center; justify-content: space-between; margin-bottom: 10px; }
+        .review-summary-text { font-size: 1.2rem; font-weight: 700; }
+        .review-summary-text.positive { color: #66c0f4; }
+        .tags { display: flex; flex-wrap: wrap; gap: 5px; }
+        .tag { background-color: rgba(255,255,255,0.1); padding: 3px 8px; border-radius: 3px; font-size: 0.8rem; }
+        .tag.free { background-color: var(--steam-green); color: white; }
+        .game-lore { margin-top: 20px; }
+        .game-lore p { margin-bottom: 15px; }
+        .game-lore strong { color: var(--steam-light-blue); }
+        .slogan {
+            font-style: italic;
+            text-align: right;
+            color: var(--steam-text-dim);
+            border-top: 1px solid var(--steam-darker-bg);
+            padding-top: 15px;
+            margin-top: 20px;
+        }
+        
+        /* --- Reviews Section --- */
+        .reviews-section {
+            background-color: var(--steam-blue);
+            padding: 20px;
+            border-radius: 5px;
+        }
+        .reviews-section h2 {
+            color: var(--steam-light-blue);
+            border-bottom: 1px solid var(--steam-darker-bg);
+            padding-bottom: 10px;
+            margin-top: 0;
+        }
+        .review-form-container {
+            margin-bottom: 30px;
+            padding: 20px;
+            background-color: var(--steam-darker-bg);
+            border-radius: 5px;
+        }
+        .review-form-container .form-group { margin-bottom: 15px; }
+        .review-form-container label { display: block; margin-bottom: 5px; }
+        .review-form-container textarea { min-height: 100px; resize: vertical; }
+        
+        .star-rating {
+            display: flex;
+            flex-direction: row-reverse;
+            justify-content: flex-end;
+        }
+        .star-rating input[type="radio"] { display: none; }
+        .star-rating label {
+            color: #444;
+            font-size: 1.5rem;
+            cursor: pointer;
+            transition: color 0.2s;
+        }
+        .star-rating input[type="radio"]:checked ~ label,
+        .star-rating label:hover,
+        .star-rating label:hover ~ label {
+            color: var(--steam-orange);
+        }
+        
+        .reviews-list {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+        .review-card {
+            background-color: var(--steam-darker-bg);
+            padding: 20px;
+            border-radius: 5px;
+            border-left: 3px solid var(--steam-green);
+        }
+        .review-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+        .reviewer-name {
+            font-weight: bold;
+            color: var(--steam-light-blue);
+        }
+        .review-date {
+            color: var(--steam-text-dim);
+            font-size: 0.9rem;
+        }
+        .review-rating {
+            color: var(--steam-orange);
+            margin-bottom: 10px;
+        }
+        .review-text {
+            line-height: 1.5;
+        }
+        .login-to-review {
+            text-align: center;
+            padding: 20px;
+            background-color: var(--steam-darker-bg);
+            border-radius: 5px;
+            color: var(--steam-text-dim);
+        }
+        
+        @media (max-width: 920px) {
+            .game-page-container { grid-template-columns: 1fr; }
+            .hero-title { font-size: 2rem; }
+        }
     </style>
-    <!-- Font Awesome para iconos -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 </head>
 <body>
 
-    <!-- Lado Izquierdo: Interfaz de Usuario -->
-    <div class="user-interface">
-        <div class="logo-section">
-            <div class="logo">
-                <i class="fas fa-tv"></i>
-                <span>Ed TV</span>
-            </div>
-            <div class="online-users" id="globalUsersCount">312.931 usuarios en línea</div>
-            <div class="active-viewers" id="activeViewersCount">0 espectadores activos</div>
+    <!-- Header (siempre visible) -->
+    <header class="store-header">
+        <a href="#" class="logo" onclick="showPage('games-library-page')"><i class="fas fa-rocket"></i> ZenLauncher</a>
+        <nav>
+            <ul class="nav-menu">
+                <li><a onclick="showPage('games-library-page')">JUEGOS</a></li>
+                <li id="profile-link" class="hidden"><a onclick="showPage('profile-page')">PERFIL</a></li>
+                <li><a onclick="showPage('soporte-page')">SOPORTE</a></li>
+                <li id="login-link" class="hidden"><a onclick="showPage('login-page')">INICIAR SESIÓN</a></li>
+                <li id="register-link" class="hidden"><a onclick="showPage('register-page')">REGISTRARSE</a></li>
+                <li id="logout-link" class="hidden"><a onclick="logout()">CERRAR SESIÓN</a></li>
+            </ul>
+        </nav>
+        <div class="user-actions">
+            <img id="header-avatar" class="user-avatar hidden" src="" alt="User Avatar" onclick="document.getElementById('avatar-upload').click()">
         </div>
+    </header>
 
-        <!-- SECCIÓN DE BOTONES DE DESCARGA ELIMINADA -->
-
-        <div class="control-buttons">
-            <button class="control-btn" id="startButton">Iniciar</button>
-            <button class="control-btn stop" id="stopButton">Parar</button>
-            <button class="control-btn" id="countryButton">País</button>
-            <button class="control-btn" id="iamButton">Soy</button>
-        </div>
-    </div>
-
-    <!-- Lado Derecho: Video y Chat -->
-    <div class="video-chat-area">
-        <video id="strangerVideo" autoplay muted loop>
-            <source src="https://www.w3schools.com/html/mov_bbb.mp4" type="video/mp4">
-        </video>
-        <video id="userVideo" autoplay muted></video>
-
-        <button class="report-btn" id="reportButton" style="display:none;"><i class="fas fa-flag"></i></button>
-
-        <div id="startPrompt" class="overlay-message">
-            <p>Para comenzar, presiona <strong>Iniciar</strong> y acepta las reglas. Mantén tu cámara visible.</p>
-        </div>
+    <div class="app-container">
         
-        <div class="top-controls" id="topControls">
-            <button id="micButton"><i class="fas fa-microphone-slash"></i></button>
-            <button id="fullscreenButton"><i class="fas fa-expand"></i></button>
-            <button id="settingsButton"><i class="fas fa-cog"></i></button>
-        </div>
+        <!-- PÁGINA DE SOPORTE -->
+        <section id="soporte-page" class="page hidden">
+            <div class="content-wrapper">
+                <h2>Centro de Soporte</h2>
+                <p>¿Necesitas ayuda? Chatea con nosotros en tiempo real. El chat aparecerá en la esquina inferior derecha.</p>
+                <div id="tidio-chat-code">
+                    <p><strong>Para el administrador:</strong></p>
+                    <p>Si el chat no aparece, asegúrate de haber configurado correctamente la variable <code>TIDIO_PUBLIC_KEY</code> en el script de la página.</p>
+                </div>
+            </div>
+        </section>
+        
+        <!-- PÁGINA DE BIBLIOTECA DE JUEGOS -->
+        <section id="games-library-page" class="page hidden">
+            <h2 style="color: var(--steam-light-blue); margin-bottom: 20px;">Mis Juegos</h2>
+            <div id="games-grid" class="games-grid">
+            </div>
+        </section>
 
-        <div class="chat-overlay" id="chatOverlay">
-            <div class="chat-messages" id="chatMessages"></div>
-            <div class="chat-input-area">
-                <form id="messageForm">
-                    <input type="text" id="messageInput" placeholder="Escribe un mensaje..." autocomplete="off">
+        <!-- PÁGINA DE DETALLES DEL JUEGO -->
+        <section id="game-details-page" class="page hidden">
+            <div class="game-page-container">
+                <main class="main-content">
+                    <section class="hero-section" id="game-hero">
+                        <div class="hero-overlay"></div>
+                        <div class="hero-content">
+                            <h1 class="hero-title" id="game-title">Cargando...</h1>
+                            <div class="hero-actions">
+                                <button class="btn btn-play" id="play-game-btn">
+                                    <i class="fas fa-play"></i> Jugar Gratis
+                                </button>
+                            </div>
+                        </div>
+                    </section>
+                    <div class="side-panel-section game-lore">
+                        <h2>Acerca de este juego</h2>
+                        <div id="game-lore-content">
+                        </div>
+                    </section>
+
+                    <section class="reviews-section">
+                        <h2>Reseñas de la comunidad</h2>
+                        
+                        <div id="review-form-container" class="review-form-container hidden">
+                            <h3>Escribe tu reseña</h3>
+                            <form id="review-form">
+                                <div class="form-group">
+                                    <label>Puntuación:</label>
+                                    <div class="star-rating">
+                                        <input type="radio" id="star5" name="rating" value="5" required><label for="star5"><i class="fas fa-star"></i></label>
+                                        <input type="radio" id="star4" name="rating" value="4"><label for="star4"><i class="fas fa-star"></i></label>
+                                        <input type="radio" id="star3" name="rating" value="3"><label for="star3"><i class="fas fa-star"></i></label>
+                                        <input type="radio" id="star2" name="rating" value="2"><label for="star2"><i class="fas fa-star"></i></label>
+                                        <input type="radio" id="star1" name="rating" value="1"><label for="star1"><i class="fas fa-star"></i></label>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label for="review-text">Tu opinión:</label>
+                                    <textarea id="review-text" name="reviewText" required></textarea>
+                                </div>
+                                <button type="submit" class="btn">Enviar Reseña</button>
+                                <p id="discord-status" class="error-message"></p>
+                            </form>
+                        </div>
+
+                        <div id="login-to-review-prompt" class="login-to-review">
+                            <p>Inicia sesión para dejar una reseña.</p>
+                        </div>
+
+                        <div id="reviews-list" class="reviews-list">
+                        </div>
+                    </section>
+                </main>
+            </div>
+        </section>
+
+        <section id="login-page" class="page hidden">
+            <div class="auth-container">
+                <form class="auth-form" id="login-form">
+                    <h2>Iniciar Sesión</h2>
+                    <div class="form-group">
+                        <label for="login-username">Usuario</label>
+                        <input type="text" id="login-username" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="login-password">Contraseña</label>
+                        <input type="password" id="login-password" required>
+                    </div>
+                    <button type="submit" class="btn">Entrar</button>
+                    <p class="error-message" id="login-error"></p>
+                    <div class="auth-switch">
+                        ¿No tienes cuenta? <a onclick="showPage('register-page')">Regístrate</a>
+                    </div>
                 </form>
             </div>
-        </div>
+        </section>
+
+        <section id="register-page" class="page hidden">
+            <div class="auth-container">
+                <form class="auth-form" id="register-form">
+                    <h2>¡Crea tu cuenta para empezar!</h2>
+                    <div class="form-group">
+                        <label for="register-username">Usuario</label>
+                        <input type="text" id="register-username" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="register-password">Contraseña</label>
+                        <input type="password" id="register-password" required>
+                    </div>
+                    <button type="submit" class="btn">Registrarse</button>
+                    <p class="error-message" id="register-error"></p>
+                    <div class="auth-switch">
+                        ¿Ya tienes cuenta? <a onclick="showPage('login-page')">Inicia Sesión</a>
+                    </div>
+                </form>
+            </div>
+        </section>
+
+        <section id="profile-page" class="page hidden">
+            <div class="profile-header">
+                <img id="profile-page-avatar" src="" alt="User Avatar" class="profile-avatar" onclick="document.getElementById('avatar-upload').click()">
+                <div class="profile-info">
+                    <h1 id="profile-page-username">Cargando...</h1>
+                    <p>Miembro desde hoy</p>
+                </div>
+            </div>
+            <div class="played-games-section">
+                <h2>Juegos Jugados</h2>
+                <div id="played-games-list" class="played-games-grid">
+                </div>
+            </div>
+        </section>
     </div>
 
-    <!-- Modals -->
-    <div id="settingsModal" class="modal">
-        <div class="modal-content">
-            <span class="close-modal" onclick="closeModal('settingsModal')">&times;</span>
-            <h2>Configuración</h2>
-            <p>Ajusta tu experiencia aquí (solo por apariencia).</p>
-        </div>
-    </div>
-    <div id="countryModal" class="modal">
-        <div class="modal-content">
-            <span class="close-modal" onclick="closeModal('countryModal')">&times;</span>
-            <h2>Selecciona tu país</h2>
-            <ul>
-                <li>España</li>
-                <li>México</li>
-                <li>Argentina</li>
-                <li>Colombia</li>
-                <li>Estados Unidos</li>
-            </ul>
-        </div>
-    </div>
-    <div id="iamModal" class="modal">
-        <div class="modal-content">
-            <span class="close-modal" onclick="closeModal('iamModal')">&times;</span>
-            <h2>Yo soy...</h2>
-            <ul>
-                <li>Chico</li>
-                <li>Chica</li>
-                <li>Pareja</li>
-            </ul>
-        </div>
-    </div>
+    <!-- Input oculto para subir el avatar -->
+    <input type="file" id="avatar-upload" accept="image/*" class="hidden">
 
     <script>
+        // =================================================================================
+        // == CONFIGURACIÓN DE DISCORD Y TIDIO ==
+        // == PEGA TUS CLAVES AQUÍ ==
+        // =================================================================================
+        const DISCORD_TOKEN = 'AQUÍ_VA_EL_TOKEN_DE_TU_BOT'; // <--- PEGA TU TOKEN DE DISCORD AQUÍ
+        const DISCORD_CHANNEL_ID = 'AQUÍ_VA_EL_ID_DE_TU_CANAL'; // <--- PEGA EL ID DE TU CANAL DE DISCORD AQUÍ
+        const TIDIO_PUBLIC_KEY = 'AQUÍ_VA_TU_PUBLIC_KEY'; // <--- PEGA TU PUBLIC KEY DE TIDIO AQUÍ
+        // =================================================================================
+
+        // Base de datos de juegos
+        const gamesDatabase = [
+            {
+                id: 'zenith-arena',
+                title: 'Zenith Arena: Neon Protocols',
+                coverImage: 'https://picsum.photos/seed/zenithcover/300/400.jpg',
+                heroImage: 'https://picsum.photos/seed/zenithhero/1200/400.jpg',
+                description: `
+                    <p>La simulación Zenith es el sistema de seguridad más avanzado de Zen Estudio. No es un mundo físico, es una arquitectura de datos pura.</p>
+                    <p><strong>La Amenaza:</strong> Un virus autoreplicante conocido como "El Enjambre Rojo" ha infectado los sectores críticos. Su objetivo es borrar la base de datos central.</p>
+                    <p><strong>Tu Misión:</strong> Eres un Bit Centinela (Cian). Tu código ha sido inyectado en el sistema para una purga total. Si el Enjambre te toca, tu integridad se corrompe. Si disparas, el sistema se estabiliza.</p>
+                    <p class="slogan">"No es un juego, es mantenimiento preventivo."</p>
+                `,
+                tags: ['Gratis', 'Acción', 'Aventura', 'RPG', 'Cyberpunk']
+            }
+        ];
+
         document.addEventListener('DOMContentLoaded', () => {
-            // --- ELEMENTOS DEL DOM ---
-            const startButton = document.getElementById('startButton');
-            const stopButton = document.getElementById('stopButton');
-            const strangerVideo = document.getElementById('strangerVideo');
-            const userVideo = document.getElementById('userVideo');
-            const startPrompt = document.getElementById('startPrompt');
-            const topControls = document.getElementById('topControls');
-            const chatOverlay = document.getElementById('chatOverlay');
-            const chatMessages = document.getElementById('chatMessages');
-            const messageForm = document.getElementById('messageForm');
-            const messageInput = document.getElementById('messageInput');
-            const micButton = document.getElementById('micButton');
-            const fullscreenButton = document.getElementById('fullscreenButton');
-            const reportButton = document.getElementById('reportButton');
+            const pages = document.querySelectorAll('.page');
+            const loginForm = document.getElementById('login-form');
+            const registerForm = document.getElementById('register-form');
+            const reviewForm = document.getElementById('review-form');
+            const avatarUploadInput = document.getElementById('avatar-upload');
+            const loginError = document.getElementById('login-error');
+            const registerError = document.getElementById('register-error');
 
-            // --- ESTADO Y LÓGICA ---
-            let userStream = null;
-            let audioStream = null;
-            let conversationHistory = [];
-            const API_URL = 'http://localhost:3001/chat';
-            const WS_URL = 'ws://localhost:3001';
+            let currentUser = null;
+            let currentDisplayedGame = null;
 
-            // --- CONEXIÓN WEBSOCKET PARA CONTEO DE VISTANTES ---
-            const ws = new WebSocket(WS_URL);
-            ws.onmessage = (event) => {
-                const data = JSON.parse(event.data);
-                if (data.type === 'viewerCount') {
-                    document.getElementById('activeViewersCount').textContent = `${data.count} espectadores activos`;
-                }
-            };
-
-            // --- SIMULACIÓN DE CONTEO GLOBAL DE USUARIOS ---
-            let globalUsers = 312931;
-            setInterval(() => {
-                const change = Math.floor(Math.random() * 21) - 10;
-                globalUsers += change;
-                if (globalUsers < 300000) globalUsers = 300000;
-                document.getElementById('globalUsersCount').textContent = `${globalUsers.toLocaleString('es-ES')} usuarios en línea`;
-            }, 5000);
-
-            // --- FUNCIONES ---
-            const addMessage = (text, sender) => {
-                const messageDiv = document.createElement('div');
-                messageDiv.classList.add('message', sender);
-                messageDiv.textContent = text;
-                chatMessages.appendChild(messageDiv);
-                chatMessages.scrollTop = chatMessages.scrollHeight;
-            };
-            
-            const getBotResponse = async (userMessage) => {
-                conversationHistory.push({ role: 'user', content: userMessage });
-                try {
-                    const response = await fetch(API_URL, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ messages: conversationHistory }) });
-                    const data = await response.json();
-                    const botReply = data.reply;
-                    conversationHistory.push({ role: 'assistant', content: botReply });
-                    addMessage(botReply, 'stranger');
-                } catch (error) {
-                    console.error('Error:', error);
-                    addMessage('El extraño se ha desconectado.', 'stranger');
-                }
-            };
-
-            const startMedia = async () => {
-                try {
-                    userStream = await navigator.mediaDevices.getUserMedia({ video: true, audio: false });
-                    userVideo.srcObject = userStream;
-                    userVideo.style.display = 'block';
-                } catch (error) { console.error("Error de cámara:", error); userVideo.style.display = 'none'; }
-            };
-            const stopMedia = () => {
-                if (userStream) { userStream.getTracks().forEach(t => t.stop()); userStream = null; }
-                if (audioStream) { audioStream.getTracks().forEach(t => t.stop()); audioStream = null; }
-                userVideo.style.display = 'none';
-            };
-
-            const toggleMicrophone = async () => {
-                const icon = micButton.querySelector('i');
-                if (audioStream) {
-                    audioStream.getTracks().forEach(t => t.stop());
-                    audioStream = null;
-                    icon.className = 'fas fa-microphone-slash';
-                    micButton.classList.remove('active');
-                } else {
-                    try {
-                        audioStream = await navigator.mediaDevices.getUserMedia({ audio: true });
-                        icon.className = 'fas fa-microphone';
-                        micButton.classList.add('active');
-                    } catch (error) { console.error("Error de micrófono:", error); }
-                }
-            };
-
-            const toggleFullscreen = () => {
-                if (!document.fullscreenElement) {
-                    document.documentElement.requestFullscreen();
-                    fullscreenButton.querySelector('i').className = 'fas fa-compress';
-                } else {
-                    document.exitFullscreen();
-                    fullscreenButton.querySelector('i').className = 'fas fa-expand';
-                }
-            };
-            
-            const openModal = (modalId) => { document.getElementById(modalId).style.display = 'flex'; };
-            const closeModal = (modalId) => { document.getElementById(modalId).style.display = 'none'; };
-            window.closeModal = closeModal;
-            
-            const startChat = () => {
-                startPrompt.style.display = 'none';
-                topControls.style.display = 'block';
-                chatOverlay.style.display = 'flex';
-                reportButton.style.display = 'block';
+            function updateAvatarElements() {
+                const headerAvatar = document.getElementById('header-avatar');
+                const profileAvatar = document.getElementById('profile-page-avatar');
                 
-                strangerVideo.style.display = 'block';
-                strangerVideo.play();
-                startMedia();
-                getBotResponse("Hola, ¿qué tal?");
-            };
+                if (currentUser && currentUser.avatar) {
+                    headerAvatar.src = currentUser.avatar;
+                    profileAvatar.src = currentUser.avatar;
+                } else if (currentUser) {
+                    const defaultAvatarUrl = `https://ui-avatars.com/api/?name=${currentUser.username}&background=1b2838&color=66c0f4&size=100`;
+                    headerAvatar.src = defaultAvatarUrl;
+                    profileAvatar.src = defaultAvatarUrl;
+                }
+            }
 
-            const stopChat = () => {
-                stopMedia();
-                strangerVideo.pause(); strangerVideo.currentTime = 0; strangerVideo.style.display = 'none';
-                conversationHistory = []; chatMessages.innerHTML = '';
-                topControls.style.display = 'none'; chatOverlay.style.display = 'none'; reportButton.style.display = 'none';
-                startPrompt.style.display = 'block';
-            };
+            function showPage(pageId) {
+                if ((pageId !== 'login-page' && pageId !== 'register-page' && pageId !== 'soporte-page') && !currentUser) {
+                    showPage('login-page');
+                    return;
+                }
+                
+                pages.forEach(page => page.classList.add('hidden'));
+                document.getElementById(pageId).classList.remove('hidden');
 
-            // --- EVENT LISTENERS ---
-            startButton.addEventListener('click', startChat);
-            stopButton.addEventListener('click', stopChat);
-            micButton.addEventListener('click', toggleMicrophone);
-            fullscreenButton.addEventListener('click', toggleFullscreen);
-            document.getElementById('settingsButton').addEventListener('click', () => openModal('settingsModal'));
-            document.getElementById('countryButton').addEventListener('click', () => openModal('countryModal'));
-            document.getElementById('iamButton').addEventListener('click', () => openModal('iamModal'));
-            reportButton.addEventListener('click', () => alert('Usuario reportado. (Solo es una simulación)'));
+                if (pageId === 'games-library-page') {
+                    populateGamesLibrary();
+                }
+                if (pageId === 'profile-page') {
+                    populateProfile();
+                }
+                if (pageId === 'soporte-page') {
+                    loadTidioChat();
+                }
+            }
 
-            messageForm.addEventListener('submit', (e) => {
+            function loadTidioChat() {
+                // Cargar el script de Tidio solo si no se ha cargado antes
+                if (!document.getElementById('tidio-chat-script') && TIDIO_PUBLIC_KEY && TIDIO_PUBLIC_KEY !== 'AQUÍ_VA_TU_PUBLIC_KEY') {
+                    const script = document.createElement('script');
+                    script.src = `//code.tidio.co/${TIDIO_PUBLIC_KEY}.js`;
+                    script.async = true;
+                    script.id = 'tidio-chat-script';
+                    document.body.appendChild(script);
+                }
+            }
+
+            function showGameDetails(gameId) {
+                currentDisplayedGame = gamesDatabase.find(g => g.id === gameId);
+                if (!currentDisplayedGame) return;
+
+                document.getElementById('game-title').innerText = currentDisplayedGame.title;
+                document.getElementById('game-hero').style.backgroundImage = `url('${currentDisplayedGame.heroImage}')`;
+                document.getElementById('game-lore-content').innerHTML = currentDisplayedGame.description;
+                
+                const playBtn = document.getElementById('play-game-btn');
+                playBtn.onclick = () => playGame(currentDisplayedGame.title, currentDisplayedGame.coverImage);
+
+                showPage('game-details-page');
+                populateReviews();
+            }
+
+            function updateUI() {
+                const profileLink = document.getElementById('profile-link');
+                const loginLink = document.getElementById('login-link');
+                const registerLink = document.getElementById('register-link');
+                const logoutLink = document.getElementById('logout-link');
+                const headerAvatar = document.getElementById('header-avatar');
+                const reviewFormContainer = document.getElementById('review-form-container');
+                const loginPrompt = document.getElementById('login-to-review-prompt');
+
+                if (currentUser) {
+                    profileLink.classList.remove('hidden');
+                    logoutLink.classList.remove('hidden');
+                    headerAvatar.classList.remove('hidden');
+                    loginLink.classList.add('hidden');
+                    registerLink.classList.add('hidden');
+                    
+                    updateAvatarElements();
+                    
+                    const hasReviewed = currentDisplayedGame && currentUser.reviews && currentUser.reviews.some(r => r.gameTitle === currentDisplayedGame.title);
+                    if (hasReviewed) {
+                        reviewFormContainer.style.display = 'none';
+                    } else {
+                        reviewFormContainer.style.display = 'block';
+                    }
+                    loginPrompt.style.display = 'none';
+                } else {
+                    profileLink.classList.add('hidden');
+                    logoutLink.classList.add('hidden');
+                    headerAvatar.classList.add('hidden');
+                    loginLink.classList.remove('hidden');
+                    registerLink.classList.remove('hidden');
+                    
+                    reviewFormContainer.style.display = 'none';
+                    loginPrompt.style.display = 'block';
+                }
+            }
+
+            function populateGamesLibrary() {
+                const gamesGrid = document.getElementById('games-grid');
+                gamesGrid.innerHTML = '';
+                gamesDatabase.forEach(game => {
+                    const card = document.createElement('div');
+                    card.className = 'game-card';
+                    card.onclick = () => showGameDetails(game.id);
+                    card.innerHTML = `
+                        <img src="${game.coverImage}" alt="${game.title}">
+                        <h3>${game.title}</h3>
+                    `;
+                    gamesGrid.appendChild(card);
+                });
+            }
+
+            function saveUsers(users) {
+                localStorage.setItem('users', JSON.stringify(users));
+            }
+
+            function getUsers() {
+                const users = localStorage.getItem('users');
+                return users ? JSON.parse(users) : {};
+            }
+
+            function login(username, password) {
+                const users = getUsers();
+                if (users[username] && users[username].password === password) {
+                    currentUser = { username, ...users[username] };
+                    localStorage.setItem('currentUser', username);
+                    updateUI();
+                    showPage('games-library-page');
+                    return true;
+                }
+                return false;
+            }
+
+            function logout() {
+                currentUser = null;
+                localStorage.removeItem('currentUser');
+                updateUI();
+                showPage('login-page');
+            }
+            
+            function playGame(title, image) {
+                if (!currentUser) {
+                    alert('Debes iniciar sesión para jugar.');
+                    showPage('login-page');
+                    return;
+                }
+                const users = getUsers();
+                if (!currentUser.playedGames) currentUser.playedGames = [];
+                const gameExists = currentUser.playedGames.some(game => game.title === title);
+                if (!gameExists) {
+                    currentUser.playedGames.push({ title, image });
+                    users[currentUser.username] = currentUser;
+                    saveUsers(users);
+                    alert(`¡${title} añadido a tus juegos jugados!`);
+                } else {
+                    alert(`Ya has jugado a ${title}.`);
+                }
+            }
+
+            function populateProfile() {
+                if (!currentUser) return;
+                document.getElementById('profile-page-username').innerText = currentUser.username;
+                updateAvatarElements();
+                
+                const gamesList = document.getElementById('played-games-list');
+                gamesList.innerHTML = '';
+                if (currentUser.playedGames && currentUser.playedGames.length > 0) {
+                    currentUser.playedGames.forEach(game => {
+                        const card = document.createElement('div');
+                        card.className = 'played-game-card';
+                        card.innerHTML = `<img src="${game.image}" alt="${game.title}"><p>${game.title}</p>`;
+                        gamesList.appendChild(card);
+                    });
+                } else {
+                    gamesList.innerHTML = '<p style="grid-column: 1/-1; text-align:center; color: var(--steam-text-dim);">Aún no has jugado a ningún juego. ¡Ve a la biblioteca y empieza!</p>';
+                }
+            }
+            
+            function populateReviews() {
+                if (!currentDisplayedGame) return;
+                
+                const reviewsList = document.getElementById('reviews-list');
+                reviewsList.innerHTML = '';
+                const allUsers = getUsers();
+                const allReviews = [];
+
+                for (const username in allUsers) {
+                    const user = allUsers[username];
+                    if (user.reviews) {
+                        user.reviews.forEach(review => {
+                            if (review.gameTitle === currentDisplayedGame.title) {
+                                allReviews.push({ ...review, username });
+                            }
+                        });
+                    }
+                }
+                allReviews.sort((a, b) => new Date(b.date) - new Date(a.date));
+                if (allReviews.length > 0) {
+                    allReviews.forEach(review => {
+                        const card = document.createElement('div');
+                        card.className = 'review-card';
+                        const stars = '★'.repeat(review.rating) + '☆'.repeat(5 - review.rating);
+                        card.innerHTML = `
+                            <div class="review-header"><span class="reviewer-name">${review.username}</span><span class="review-date">${new Date(review.date).toLocaleDateString('es-ES')}</span></div>
+                            <div class="review-rating">${stars}</div>
+                            <p class="review-text">${review.text}</p>`;
+                        reviewsList.appendChild(card);
+                    });
+                } else {
+                    reviewsList.innerHTML = '<p style="text-align:center; color: var(--steam-text-dim);">Sé el primero en reseñar este juego.</p>';
+                }
+            }
+            
+            async function sendToDiscord(review) {
+                const statusEl = document.getElementById('discord-status');
+
+                if (!DISCORD_TOKEN || !DISCORD_CHANNEL_ID || DISCORD_TOKEN === 'AQUÍ_VA_EL_TOKEN_DE_TU_BOT') {
+                    statusEl.textContent = 'El administrador no ha configurado Discord.';
+                    statusEl.className = 'error-message';
+                    return;
+                }
+
+                const stars = '⭐'.repeat(review.rating) + '☆'.repeat(5 - review.rating);
+                const embed = {
+                    title: `Nueva Reseña para: ${review.gameTitle}`,
+                    color: 0x00AE86,
+                    fields: [
+                        { name: 'Usuario', value: review.username, inline: true },
+                        { name: 'Puntuación', value: stars, inline: true },
+                        { name: 'Reseña', value: review.text }
+                    ],
+                    timestamp: new Date().toISOString()
+                };
+
+                try {
+                    const response = await fetch(`https://discord.com/api/v10/channels/${DISCORD_CHANNEL_ID}/messages`, {
+                        method: 'POST',
+                        headers: {
+                            'Authorization': `Bot ${DISCORD_TOKEN}`,
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({ embeds: [embed] })
+                    });
+
+                    if (!response.ok) {
+                        const errorData = await response.json();
+                        throw new Error(errorData.message || 'Error al enviar a Discord');
+                    }
+
+                    statusEl.textContent = '¡Reseña enviada a Discord con éxito!';
+                    statusEl.className = 'success-message';
+
+                } catch (error) {
+                    console.error('Error sending to Discord:', error);
+                    statusEl.textContent = `Error al enviar a Discord: ${error.message}`;
+                    statusEl.className = 'error-message';
+                }
+            }
+
+            function handleReviewSubmit(e) {
                 e.preventDefault();
-                const text = messageInput.value.trim();
-                if (text) { addMessage(text, 'you'); messageInput.value = ''; getBotResponse(text); }
+                if (!currentDisplayedGame) return;
+                
+                const rating = e.target.rating.value;
+                const text = e.target.reviewText.value;
+                
+                if (!currentUser.reviews) currentUser.reviews = [];
+                
+                const newReview = {
+                    gameTitle: currentDisplayedGame.title,
+                    rating: parseInt(rating),
+                    text: text,
+                    date: new Date().toISOString()
+                };
+                
+                currentUser.reviews.push(newReview);
+                
+                const users = getUsers();
+                users[currentUser.username] = currentUser;
+                saveUsers(users);
+                
+                sendToDiscord({ ...newReview, username: currentUser.username });
+
+                e.target.reset();
+                updateUI();
+                populateReviews();
+            }
+
+            function handleAvatarChange(event) {
+                const file = event.target.files[0];
+                if (file && currentUser) {
+                    const reader = new FileReader();
+                    reader.onload = function(e) {
+                        const avatarDataUrl = e.target.result;
+                        currentUser.avatar = avatarDataUrl;
+                        
+                        const users = getUsers();
+                        users[currentUser.username] = currentUser;
+                        saveUsers(users);
+                        
+                        updateAvatarElements();
+                    }
+                    reader.readAsDataURL(file);
+                }
+            }
+
+            // Event Listeners
+            loginForm.addEventListener('submit', (e) => {
+                e.preventDefault();
+                const username = document.getElementById('login-username').value;
+                const password = document.getElementById('login-password').value;
+                if (login(username, password)) {
+                    loginError.textContent = '';
+                    loginForm.reset();
+                } else {
+                    loginError.textContent = 'Usuario o contraseña incorrectos.';
+                }
             });
+
+            registerForm.addEventListener('submit', (e) => {
+                e.preventDefault();
+                const username = document.getElementById('register-username').value;
+                const password = document.getElementById('register-password').value;
+                const users = getUsers();
+
+                if (users[username]) {
+                    registerError.textContent = 'El nombre de usuario ya está en uso.';
+                } else {
+                    users[username] = { password, playedGames: [], reviews: [] };
+                    saveUsers(users);
+                    registerError.textContent = '';
+                    registerForm.reset();
+                    login(username, password);
+                }
+            });
+            
+            reviewForm.addEventListener('submit', handleReviewSubmit);
+            avatarUploadInput.addEventListener('change', handleAvatarChange);
+
+            // Initial Load
+            const savedUsername = localStorage.getItem('currentUser');
+            if (savedUsername) {
+                const users = getUsers();
+                if (users[savedUsername]) {
+                    currentUser = { username: savedUsername, ...users[savedUsername] };
+                }
+            }
+
+            updateUI();
+            if (currentUser) {
+                showPage('games-library-page');
+            } else {
+                showPage('register-page');
+            }
         });
     </script>
+
 </body>
 </html>
